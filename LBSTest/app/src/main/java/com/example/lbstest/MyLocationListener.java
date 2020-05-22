@@ -23,9 +23,9 @@ public class MyLocationListener extends BDAbstractLocationListener {
     public void onReceiveLocation(BDLocation location) {
         StringBuffer currentPositon = new StringBuffer();
         //mapView 销毁后不在处理新接收的位置
-        if (location == null || mMapView == null){
+        /*if (location == null || mMapView == null){
             return;
-        }
+        }*/
         currentPositon.append("纬度：").append(location.getLatitude()).append("\n");
         currentPositon.append("纬度：").append(location.getLongitude()).append("\n");
         currentPositon.append("定位方式");

@@ -79,26 +79,30 @@ public class MainActivity extends Activity{
         ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE,1);
 
         //获取地图控件引用
-        mapView = (MapView) findViewById(R.id.bmapView);
+//        mapView = (MapView) findViewById(R.id.bmapView);
         positionText = (TextView) findViewById(R.id.position_text_view);
+        mBaiduMap = mapView.getMap();
+        locationClient = new LocationClient(getApplicationContext());
+        locationClient.registerLocationListener(new MyLocationListener(null,mBaiduMap,positionText));
+        locationClient.start();
 
         //直接在Java代码中添加MapView的方式来展示地图
         /*mapView = new MapView(this);
         setContentView(mapView);*/
 
         //在Java代码中添加MapView的方式支持通过BaiduMapOptions对象根据需求构造包含特定地图状态类型和控件显示状态的MapView对象
-        BaiduMapOptions options = new BaiduMapOptions();
+        /*BaiduMapOptions options = new BaiduMapOptions();
         //设置地图模式为卫星地图
-        /*MAP_TYPE_NORMAL	普通地图（包含3D地图）
+        *//*MAP_TYPE_NORMAL	普通地图（包含3D地图）
         MAP_TYPE_SATELLITE	卫星图
-        MAP_TYPE_NONE	空白地图*/
+        MAP_TYPE_NONE	空白地图*//*
         options.mapType(BaiduMap.MAP_TYPE_NORMAL);
         mapView = new MapView(this, options);
-        setContentView(mapView);
+        setContentView(mapView);*/
 
         //设置地图缩放比例
-        mBaiduMap = mapView.getMap();
-        MapStatus.Builder builder = new MapStatus.Builder();
+        //mBaiduMap = mapView.getMap();
+        /*MapStatus.Builder builder = new MapStatus.Builder();
         builder.zoom(18.0f);
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
 
@@ -113,23 +117,23 @@ public class MainActivity extends Activity{
         //开启热力图（只有在地图层级介于11-20级时，可显示城市热力图。）
         //mBaiduMap.setBaiduHeatMapEnabled(true);
         //开启地图的定位图层
-        mBaiduMap.setMyLocationEnabled(true);
+        mBaiduMap.setMyLocationEnabled(true);*/
 
         //通过LocationClient发起定位
         //定位初始化
-        locationClient = new LocationClient(this);
+//        locationClient = new LocationClient(this);
 
         //通过LocationClientOption设置LocationClient相关参数
-        LocationClientOption option = new LocationClientOption();
+        /*LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true); // 打开gps
         option.setCoorType("bd09ll"); // 设置坐标类型
         option.setScanSpan(1000);
 
         //设置locationClientOption
-        locationClient.setLocOption(option);
+        locationClient.setLocOption(option);*/
 
         //注册LocationListener监听器
-        MyLocationListener myLocationListener = new MyLocationListener(mapView, mBaiduMap,positionText);
+        /*MyLocationListener myLocationListener = new MyLocationListener(mapView, mBaiduMap,positionText);
         locationClient.registerLocationListener(myLocationListener);
         //开启地图定位图层
         locationClient.start();
@@ -141,7 +145,7 @@ public class MainActivity extends Activity{
         int accuracyCircleStrokeColor = 0xAA00FF00;
         MyLocationConfiguration mLocationConfiguration = new MyLocationConfiguration(mCurrentMode,true,null,accuracyCircleFillColor,accuracyCircleStrokeColor);
         mBaiduMap.setMyLocationConfiguration(mLocationConfiguration);
-        mBaiduMap.setIndoorEnable(true);//打开室内图，默认为关闭状态
+        mBaiduMap.setIndoorEnable(true);//打开室内图，默认为关闭状态*/
 
     }
     @Override
