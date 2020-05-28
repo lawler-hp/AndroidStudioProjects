@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
-public class FruitActivity extends AppCompatActivity {
+public class FruitActivity extends MyApplication {
 
     public static final String FRUIT_NAME = "fruit_name";
 

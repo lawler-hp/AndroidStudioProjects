@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF">
+
+    <!--
+    定义了一个相对布局来作为标题栏，将布局高度设置为actionBar的高度，背景色设置为colorPrimary。
+    然后在相对布局中放置了一个TextView用于显示标题内容，放置了一个Button 用于执行返回操作，
+    这里之所以要自己定义标题栏，是因为碎片中最好不要直接使用ActionBar或Toolbar,
+    不然在复用的时候可能会出现一些你不想看到的效果。-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#FFF"
+            android:layout_centerInParent="true"
+            android:text="标题"/>
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_back"
+            />
+    </RelativeLayout>
+
+    <!--
+        ListView显示省市县数据，这里不用RecyclerView是因为，ListView会在每项数据间自动添加黑线，RecyclerView实现比较困难
+    -->
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+<!--    <ProgressBar
+        android:id="@+id/indeterminateBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />-->
+
+</LinearLayout>
