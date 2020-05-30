@@ -8,37 +8,68 @@
     android:background="@color/colorPrimary"
     tools:context=".WeatherActivity">
 
+
     <!--
-    ScrollView滚动条的隐藏:android:scrollbars="none"
-    删除ScrollView拉到尽头（顶部、底部），然后继续拉出现的阴影效果
+    DrawerLayout:滑动菜单
+
     -->
-    <ScrollView
-        android:id="@+id/weather_layout"
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
         <!--
-            导入布局:<include layout="@layout/title" />
+            SwipeRefreshLayout 下拉刷新
+            添加依赖库：implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
         -->
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <include layout="@layout/title" />
+            <!--
+            ScrollView滚动条的隐藏:android:scrollbars="none"
+            删除ScrollView拉到尽头（顶部、底部），然后继续拉出现的阴影效果
+            -->
+            <ScrollView
+                android:id="@+id/weather_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none">
 
-            <include layout="@layout/now" />
+                <!--
+                    导入布局:<include layout="@layout/title" />
+                -->
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <include layout="@layout/forecast" />
+                    <include layout="@layout/title" />
 
-            <include layout="@layout/aqi" />
+                    <include layout="@layout/now" />
 
-            <include layout="@layout/suggestion" />
+                    <include layout="@layout/forecast" />
 
-        </LinearLayout>
+                    <include layout="@layout/aqi" />
 
-    </ScrollView>
+                    <include layout="@layout/suggestion" />
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <fragment
+            android:id="@+id/choose_area_fragment"
+            android:name="com.example.coolweather.ChooseAreaFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            tools:layout="@layout/choose_area" />
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </FrameLayout>
