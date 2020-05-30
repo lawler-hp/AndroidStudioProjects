@@ -7,6 +7,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -19,10 +21,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.coolweather.gson.AirQuality;
 import com.example.coolweather.gson.Forecast;
 import com.example.coolweather.gson.Suggestion;
 import com.example.coolweather.gson.Weather;
+import com.example.coolweather.service.AutoUpdateService;
 import com.example.coolweather.util.HttpUtil;
 import com.example.coolweather.util.Utility;
 
@@ -52,11 +56,18 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView sportText;
     private String weatherId;
     private Button navButton;
+    private  ImageView bingPicImg;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //实现背景图和状态栏融合在一起，安卓5.0以上才支持，
+        if (Build.VERSION.SDK_INT >= 21){
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);   //将状态栏设置为透明色
+        }
         setContentView(R.layout.activity_weather);
 
         // 初始化各控件
@@ -75,6 +86,7 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh.setColorSchemeResources(R.color.colorAccent);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         navButton = (Button)findViewById(R.id.nav_button);
+        bingPicImg = (ImageView)findViewById(R.id.bing_pic_img);
 
         SharedPreferences prefs = getSharedPreferences("WeatherDate",MODE_PRIVATE);
         String weatherString = prefs.getString("weather",null);
@@ -93,8 +105,36 @@ public class WeatherActivity extends AppCompatActivity {
             requestWeather(weatherId);
         }
 
+        String bingPic = prefs.getString("bing_pic",null);
+        if (bingPic != null){
+            Glide.with(this).load(bingPic).into(bingPicImg);
+        }else {
+            loadBingPic();
+        }
+
         swipeRefresh.setOnRefreshListener(()->requestWeather(weatherId));
         navButton.setOnClickListener(v->drawerLayout.openDrawer(GravityCompat.START));
+    }
+
+    /**
+     * 加载必应图片
+     */
+    private void loadBingPic() {
+        String requesBingPic = "http://guolin.tech/api/bing_pic";
+        HttpUtil.sendOkHttpRequest(requesBingPic, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                final String bingPic = response.body().string();
+                SharedPreferences.Editor  editor = getSharedPreferences("WeatherDate",MODE_PRIVATE).edit();
+                editor.putString("bing_pic",bingPic).apply();
+                runOnUiThread(()->Glide.with(WeatherActivity.this).load(bingPic).into(bingPicImg));
+            }
+        });
     }
 
     /**
@@ -150,6 +190,7 @@ public class WeatherActivity extends AppCompatActivity {
                         });
                     }
         });
+        loadBingPic();
     }
 
     /**
@@ -200,7 +241,9 @@ public class WeatherActivity extends AppCompatActivity {
         sportText.setText(suggestionArray[3]);
         weatherLayout.setVisibility(View.VISIBLE);
         swipeRefresh.setRefreshing(false);  //停止刷新
-/*        Intent intent = new Intent(this, AutoUpdateService.class);
-        startService(intent);*/
+
+        //启动服务
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 }

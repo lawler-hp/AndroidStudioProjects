@@ -10,62 +10,77 @@
 
 
     <!--
-    DrawerLayout:滑动菜单
+    android:scaleType是控制图片如何resized/moved来匹对ImageView的size。
+    centerCrop  按比例扩大图片的size居中显示，使得图片长(宽)等于或大于View的长(宽)
+    -->
+    <ImageView
+        android:id="@+id/bing_pic_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
 
+    <!--
+    DrawerLayout:滑动菜单
     -->
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <!--
-            SwipeRefreshLayout 下拉刷新
-            添加依赖库：implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-        -->
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <include layout="@layout/title" />
 
             <!--
-            ScrollView滚动条的隐藏:android:scrollbars="none"
-            删除ScrollView拉到尽头（顶部、底部），然后继续拉出现的阴影效果
+                SwipeRefreshLayout 下拉刷新
+                添加依赖库：implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
             -->
-            <ScrollView
-                android:id="@+id/weather_layout"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never"
-                android:scrollbars="none">
-
+                android:layout_height="match_parent">
                 <!--
-                    导入布局:<include layout="@layout/title" />
+                ScrollView滚动条的隐藏:android:scrollbars="none"
+                删除ScrollView拉到尽头（顶部、底部），然后继续拉出现的阴影效果
                 -->
-                <LinearLayout
-                    android:orientation="vertical"
+                <ScrollView
+                    android:id="@+id/weather_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
 
-                    <include layout="@layout/title" />
+                    <!--
+                        导入布局:<include layout="@layout/title" />
+                    -->
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <include layout="@layout/now" />
+                        <include layout="@layout/now" />
 
-                    <include layout="@layout/forecast" />
+                        <include layout="@layout/forecast" />
 
-                    <include layout="@layout/aqi" />
+                        <include layout="@layout/aqi" />
 
-                    <include layout="@layout/suggestion" />
+                        <include layout="@layout/suggestion" />
 
-                </LinearLayout>
+                    </LinearLayout>
 
-            </ScrollView>
+                </ScrollView>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        </LinearLayout>
 
         <fragment
             android:id="@+id/choose_area_fragment"
             android:name="com.example.coolweather.ChooseAreaFragment"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             tools:layout="@layout/choose_area" />
