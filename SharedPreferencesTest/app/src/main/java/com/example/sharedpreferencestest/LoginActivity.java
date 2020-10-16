@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
 
     private SharedPreferences pref;
 
@@ -38,6 +39,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private CheckBox autoLogin;
 
+    RadioGroup sex_group;
+
+    //默认男性被选中
+    private String sex_str = "男性";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,11 +53,11 @@ public class LoginActivity extends AppCompatActivity {
 
         accountEdit = (EditText) findViewById(R.id.account);
         passwordEdit = (EditText) findViewById(R.id.password);
-        rememberPass = (CheckBox) findViewById(R.id.remember_pass);
-        autoLogin = (CheckBox) findViewById(R.id.auto_login);
         login = (Button) findViewById(R.id.login);
+        sex_group = (RadioGroup)findViewById(R.id.sex_group);
+        sex_group.setOnCheckedChangeListener(this);
 
-        boolean isRemember = pref.getBoolean("remember_password", false);
+/*        boolean isRemember = pref.getBoolean("remember_password", false);
         boolean isAuto = pref.getBoolean("auto_login", false);
 
         if (isRemember) {
@@ -74,38 +80,30 @@ public class LoginActivity extends AppCompatActivity {
                 }, 500);//500后执行Runnable中的run方法
 
             }
-        }
+        }*/
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String account = accountEdit.getText().toString();
                 String password = passwordEdit.getText().toString();
-                // 如果密码是666666，就认为登录成功
-                if (password.equals("666666")) {
-                    //调用SharedPreferences对象的edit()方法来获取一个SharedPreferences.Editor对象。
-                    editor = pref.edit();
 
-                    if (autoLogin.isChecked()){
-                        editor.putBoolean("auto_login", true);
-                    }
-                    if (rememberPass.isChecked()) { // 检查复选框是否被选中
+                    editor = pref.edit();
                         //向SharedPreferences.Editor对象中添加数据
                         editor.putBoolean("remember_password", true);
                         editor.putString("账号", account);
                         editor.putString("密码", password);
-                    } else {
-                        editor.clear();
-                    }
+                        editor.putString("性别", sex_str);
                     editor.apply();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                } else {
-                    Toast.makeText(LoginActivity.this, "账号或密码错误",
-                            Toast.LENGTH_SHORT).show();
                 }
-            }
         });
     }
 
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        //根据用户选择来改变sex_str的值
+        sex_str = checkedId == R.id.man_but?"男性":"女性";
+    }
 }

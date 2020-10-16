@@ -5,17 +5,11 @@
     android:layout_height="match_parent" >
 
     <TextView
+        android:id="@+id/show_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="登入成功"
         android:textAllCaps="false"
         android:textSize="36sp"
         android:textStyle="bold|italic" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="注销账号"/>
 
 </LinearLayout>
